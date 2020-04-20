@@ -16,6 +16,7 @@ public class Ticket implements Serializable {
     private Long id;
     private String nomClient;
     private double prix;
+    @Column(unique = true)
     private int codePayement;
     private boolean reserve;
     @JoinColumn(name = "id_place", referencedColumnName = "id")

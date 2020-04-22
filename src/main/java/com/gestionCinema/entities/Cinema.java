@@ -75,6 +75,22 @@ public class Cinema implements Serializable {
         this.nombreSalles = nombreSalles;
     }
 
+    public Collection<Salle> getSalles() {
+        return salles;
+    }
+
+    public void setSalles(Collection<Salle> salles) {
+        this.salles = salles;
+    }
+
+    public Ville getVille() {
+        return ville;
+    }
+
+    public void setVille(Ville ville) {
+        this.ville = ville;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;

@@ -1,9 +1,11 @@
 package com.gestionCinema.entities;
 
+import com.gestionCinema.commun.Patterns;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,6 +16,7 @@ public class Ticket implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+//    @Pattern(regexp = Patterns.PATTERN_SCRIPT, message = Patterns.MSG_VERIFICATION_SCRIPT)
     private String nomClient;
     private double prix;
     @Column(unique = true)

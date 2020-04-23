@@ -1,5 +1,6 @@
 package com.gestionCinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gestionCinema.commun.Patterns;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -19,7 +20,7 @@ public class Ticket implements Serializable {
 //    @Pattern(regexp = Patterns.PATTERN_SCRIPT, message = Patterns.MSG_VERIFICATION_SCRIPT)
     private String nomClient;
     private double prix;
-    @Column(unique = true)
+    @Column(unique = false,nullable = true)
     private int codePayement;
     private boolean reserve;
     @JoinColumn(name = "id_place", referencedColumnName = "id")
@@ -27,6 +28,7 @@ public class Ticket implements Serializable {
     private Place place;
     @JoinColumn(name = "id_projection", referencedColumnName = "id")
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Projection  projection;
 
     public Long getId() {

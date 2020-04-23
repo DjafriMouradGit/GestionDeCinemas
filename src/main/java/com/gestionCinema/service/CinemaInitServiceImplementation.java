@@ -4,14 +4,18 @@ import com.gestionCinema.entities.*;
 import com.gestionCinema.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.ApplicationScope;
 
+import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Stream;
 
 @Service
+@Transactional
 public class CinemaInitServiceImplementation implements ICinemaInitService {
     @Autowired
     private VilleRepository villeRepository;
@@ -34,7 +38,7 @@ public class CinemaInitServiceImplementation implements ICinemaInitService {
 
     @Override
     public void initVilles() {
-        Stream.of("Alger", "Tipaza", "Blida", "Oran").forEach(nameVille -> {
+        Stream.of("Alger", "Tipaza", "Blida").forEach(nameVille -> {
                     Ville ville = new Ville();
                     ville.setName(nameVille);
                     villeRepository.save(ville);
@@ -45,7 +49,7 @@ public class CinemaInitServiceImplementation implements ICinemaInitService {
     @Override
     public void initCinemas() {
         villeRepository.findAll().forEach(ville -> {
-            Stream.of("MegaBama", "IMAX", "FOUNOUN", "CHAHRAZAD").forEach(nameCinema -> {
+            Stream.of("FOUNOUN", "CHAHRAZAD").forEach(nameCinema -> {
                         Cinema cinema = new Cinema();
                         cinema.setName(nameCinema);
                         cinema.setVille(ville);
@@ -108,21 +112,48 @@ public class CinemaInitServiceImplementation implements ICinemaInitService {
 
     @Override
     public void initFilms() {
-        Stream.of("Game of thrones", "Seigneur des anneaux", "Spider man", "IRON man", "Cat women").forEach(film -> {
-                    Film film1 = new Film();
-                    film1.setTitre(film);
-                    filmRepository.save(film1);
+        double[] durees = new double[]{1, 1.5, 2, 2.5, 3};
+        List<Categorie> categories = categoryRepository.findAll();
+        Stream.of("Game of thrones", "Seigneur des anneaux", "Spider man", "IRON man", "Cat women").forEach(titreFilm -> {
+                    Film film = new Film();
+                    film.setTitre(titreFilm);
+                    film.setDuree(new Random().nextInt(durees.length));
+                    film.setPhoto(titreFilm.replaceAll(" ", ""));
+                    film.setCategorie(categories.get(new Random().nextInt(categories.size())));
+                    filmRepository.save(film);
                 }
         );
     }
 
     @Override
     public void initProjections() {
-
+        double[] prices = new double[]{30, 50, 60, 70, 90, 100};
+        salleRepository.findAll().forEach(salle -> {
+            filmRepository.findAll().forEach(film -> {
+                seanceRepository.findAll().forEach(seance -> {
+                    Projection projection = new Projection();
+                    projection.setDateProjection(new Date());
+                    projection.setPrix(prices[new Random().nextInt(prices.length)]);
+                    projection.setSalle(salle);
+                    projection.setFilm(film);
+                    projection.setSeance(seance);
+                    projectionRepository.save(projection);
+                });
+            });
+        });
     }
 
     @Override
     public void initTickets() {
-
+        projectionRepository.findAll().forEach(projection -> {
+            projection.getSalle().getPlaces().forEach(place -> {
+                Ticket ticket=new Ticket();
+                ticket.setPrix(projection.getPrix());
+                ticket.setReserve(false);
+                ticket.setPlace(place);
+                ticket.setProjection(projection);
+                ticketRepository.save(ticket);
+            });
+        });
     }
 }

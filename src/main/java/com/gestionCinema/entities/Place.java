@@ -1,5 +1,7 @@
 package com.gestionCinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -18,6 +20,7 @@ public class Place implements Serializable {
     @ManyToOne
     private Salle salle;
     @OneToMany(mappedBy = "place", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Collection<Ticket> tickets;
 
     public Long getId() {

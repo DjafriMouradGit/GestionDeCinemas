@@ -1,5 +1,6 @@
 package com.gestionCinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -19,6 +20,7 @@ public class Categorie implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "categorie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Collection<Film> films;
 
     public Long getId() {

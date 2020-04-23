@@ -1,5 +1,7 @@
 package com.gestionCinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -22,6 +24,7 @@ public class Projection implements Serializable {
 
     @JoinColumn(name = "id_salle", referencedColumnName = "id")
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Salle  salle;
     @JoinColumn(name = "id_film", referencedColumnName = "id")
     @ManyToOne
@@ -78,6 +81,14 @@ public class Projection implements Serializable {
 
     public void setTickets(Collection<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    public Seance getSeance() {
+        return seance;
+    }
+
+    public void setSeance(Seance seance) {
+        this.seance = seance;
     }
 
     @Override
